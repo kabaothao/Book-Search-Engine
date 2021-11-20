@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server-express');
+const { gql } = require("apollo-server-express");
 //define fields that are accessible from the Class model
 const typeDefs = gql`
   type Query {

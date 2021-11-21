@@ -6,6 +6,13 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+//TODO: set up server with ApolloServer
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: 
+});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 

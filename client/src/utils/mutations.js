@@ -1,6 +1,7 @@
-//settingup to import from apollo/cient
 import { gql } from "@apollo/client";
-//creating user data
+
+//use resolvers.js file as a guide to build mutations.
+
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -25,12 +26,14 @@ export const ADD_USER = gql`
   }
 `;
 
+//use queries.js file as a guide to build SAVE_BOOK and REMOVE_BOOK
 export const SAVE_BOOK = gql`
-  mutation saveBook($bookData, bookInput!) {
-    saveBook(bookData, $bookData) {
+  mutation saveBook($bookData: SavedBookInfo!) {
+    saveBook(bookData: $bookData) {
       _id
       username
       email
+      bookCount
       savedBooks {
         bookId
         authors
@@ -44,11 +47,12 @@ export const SAVE_BOOK = gql`
 `;
 
 export const REMOVE_BOOK = gql`
-  mutation removeBook($bookId: ID) {
+  mutation removeBook($bookId: String!) {
     removeBook(bookId: $bookId) {
       _id
       username
       email
+      bookCount
       savedBooks {
         bookId
         authors

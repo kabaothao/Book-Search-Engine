@@ -1,28 +1,18 @@
 const { gql } = require("apollo-server-express");
-//define fields that are accessible from the Class model
+
 const typeDefs = gql`
-  type Query {
-      me: User
-  }
-
-  type Mutation {
-    addUser(username: String!, email: String!, password: String!): Auth
-    login(email: String!, password: String!): Auth
-    saveBook(input: SavedBookInfo): User
-    removeBook(bookId: String!): User
-
   type User {
-    _id: ID
-    username: String!
+    _id: ID!
+    username: String
     email: String!
     bookCount: Int
-    savedBooks: [Book]
+    savedBooks: [Book]!
   }
   type Book {
     bookId: String!
     authors: [String]
     description: String
-    title: String!
+    title: String
     image: String
     link: String
   }
@@ -30,7 +20,23 @@ const typeDefs = gql`
     token: ID!
     user: User
   }
-  
+  type Query {
+    me: User
+  }
+  input SavedBookInfo {
+    bookId: String!
+    authors: [String]
+    description: String
+    title: String!
+    image: String
+    link: String
+  }
+  type Mutation {
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    saveBook(bookData: SavedBookInfo!): User
+    removeBook(bookId: String!): User
+  }
 `;
 
 module.exports = typeDefs;

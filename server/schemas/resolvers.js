@@ -1,25 +1,26 @@
 const { AuthenticationError } = require("apollo-server-express");
-const { User } = require("../models");
+const { User, Book } = require("../models");
 const { signToken } = require("../utils/auth");
 
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate("thoughts");
+        const userInfo = await User.findOne({ _id: context.user._id }).populate('book');
+        return userInfo;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
   },
-  //mutations are changes to the data that's currently stored in the backend.
+
   Mutation: {
-    //when user is created.
+    // Creating a User
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
-    //find one user based on email
+    //get a single user by either their email
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
@@ -37,24 +38,24 @@ const resolvers = {
 
       return { token, user };
     },
-    //saveBookprocess
-    saveBook: async (parent, { input }, context) => {
+    //saveBook
+    saveBook: async (parent, { bookData }, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
-          { _id: user._id },
-          { $addToSet: { savedBooks: input } },
+          { _id: context.user._id },
+          { $addToSet: { savedBooks: bookData } },
           { new: true, runValidators: true }
         );
         return updatedUser;
       }
       throw new AuthenticationError("You need to be logged in!");
     },
-    //removeBook process
-    removeBook: async (parent, args, context) => {
+    //removeBook
+    removeBook: async (parent, {bookId}, context) => {
       if (context.user) {
         const updatedUser = await User.findOneAndUpdate(
-          { _id: user._id },
-          { $pull: { savedBooks: { bookId: args.bookId } } },
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId: bookId } } },
           { new: true }
         );
         return updatedUser;

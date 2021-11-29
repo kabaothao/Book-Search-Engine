@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:3001",
+  "homepage": "https://booksearchengine-app.herokuapp.com/",
   "dependencies": {
     "@apollo/client": "^3.5.5",
     "@apollo/react-hooks": "^4.0.0",
